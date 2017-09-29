@@ -25,11 +25,11 @@
         <version>5</version>
     </parent>
 
-    <groupId>org.wso2.extension.siddhi.execution.time</groupId>
-    <artifactId>siddhi-execution-time-parent</artifactId>
+    <groupId>org.wso2.extension.siddhi.execution.graph</groupId>
+    <artifactId>siddhi-execution-graph-parent</artifactId>
     <version>4.0.3-SNAPSHOT</version>
     <packaging>pom</packaging>
-    <name>WSO2 Siddhi Execution Extension - Time Aggregator Pom</name>
+    <name>WSO2 Siddhi Execution Extension - Graph Aggregator Pom</name>
     <url>http://wso2.org</url>
 
     <profiles>
@@ -70,6 +70,11 @@
             <dependency>
                 <groupId>org.wso2.siddhi</groupId>
                 <artifactId>siddhi-query-api</artifactId>
+                <version>${siddhi.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.siddhi</groupId>
+                <artifactId>siddhi-query-compiler</artifactId>
                 <version>${siddhi.version}</version>
             </dependency>
             <dependency>

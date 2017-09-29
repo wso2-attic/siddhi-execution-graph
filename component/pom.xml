@@ -19,21 +19,30 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>org.wso2.extension.siddhi.execution.time</groupId>
-        <artifactId>siddhi-execution-time-parent</artifactId>
+        <groupId>org.wso2.extension.siddhi.execution.graph</groupId>
+        <artifactId>siddhi-execution-graph-parent</artifactId>
         <version>4.0.3-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>siddhi-execution-time</artifactId>
+    <artifactId>siddhi-execution-graph</artifactId>
     <packaging>bundle</packaging>
-    <name>WSO2 Siddhi Execution Extension - Time</name>
+    <name>WSO2 Siddhi Execution Extension - Graph</name>
     <url>http://wso2.org</url>
 
     <dependencies>
+
         <dependency>
             <groupId>org.wso2.siddhi</groupId>
             <artifactId>siddhi-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.wso2.siddhi</groupId>
+            <artifactId>siddhi-query-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.wso2.siddhi</groupId>
+            <artifactId>siddhi-query-compiler</artifactId>
         </dependency>
         <dependency>
             <groupId>org.apache.log4j.wso2</groupId>
