@@ -3,18 +3,8 @@
 <suite name="ExecutionTimeFunctionTestSuit" verbose="1">
     <test name="TimeFunctionTest">
         <classes>
-            <class name="org.wso2.extension.siddhi.execution.time.CurrentDateFunctionExtensionTestCase" />
-            <class name="org.wso2.extension.siddhi.execution.time.CurrentTimeFunctionExtensionTestCase" />
-            <class name="org.wso2.extension.siddhi.execution.time.CurrentTimestampFunctionExtensionTestCase" />
-            <class name="org.wso2.extension.siddhi.execution.time.DateAddFunctionExtensionTestCase" />
-            <class name="org.wso2.extension.siddhi.execution.time.DateDifferenceFunctionExtensionTestCase" />
-            <class name="org.wso2.extension.siddhi.execution.time.DateFormatFunctionExtensionTestCase" />
-            <class name="org.wso2.extension.siddhi.execution.time.DateSubFunctionExtensionTestCase" />
-            <class name="org.wso2.extension.siddhi.execution.time.ExtractAttributesFunctionExtensionTestCase" />
-            <class name="org.wso2.extension.siddhi.execution.time.ExtractDateFunctionExtensionTestCase" />
-            <class name="org.wso2.extension.siddhi.execution.time.ExtractDayOfWeekFunctionExtensionTestCase" />
-            <class name="org.wso2.extension.siddhi.execution.time.TimestampInMillisecondsFunctionExtensionTestCase" />
-            <class name="org.wso2.extension.siddhi.execution.time.UTCTimestampFunctionExtensionTestCase" />
+            <class name="org.wso2.extension.siddhi.execution.graph.LargestConnectedComponentTestCase" />
+            <class name="org.wso2.extension.siddhi.execution.graph.MaximumCliqueTestCase" />
         </classes>
     </test>
 </suite>

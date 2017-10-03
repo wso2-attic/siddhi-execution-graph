@@ -15,9 +15,14 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.wso2.extension.siddhi.execution.time;
+package org.wso2.extension.siddhi.execution.graph;
 
-import org.wso2.siddhi.core.config.ExecutionPlanContext;
+import org.wso2.siddhi.annotation.Example;
+import org.wso2.siddhi.annotation.Extension;
+import org.wso2.siddhi.annotation.Parameter;
+import org.wso2.siddhi.annotation.ReturnAttribute;
+import org.wso2.siddhi.annotation.util.DataType;
+import org.wso2.siddhi.core.config.SiddhiAppContext;
 import org.wso2.siddhi.core.event.ComplexEventChunk;
 import org.wso2.siddhi.core.event.stream.StreamEvent;
 import org.wso2.siddhi.core.event.stream.StreamEventCloner;
@@ -27,17 +32,49 @@ import org.wso2.siddhi.core.executor.ExpressionExecutor;
 import org.wso2.siddhi.core.executor.VariableExpressionExecutor;
 import org.wso2.siddhi.core.query.processor.Processor;
 import org.wso2.siddhi.core.query.processor.stream.StreamProcessor;
+import org.wso2.siddhi.core.util.config.ConfigReader;
 import org.wso2.siddhi.query.api.definition.AbstractDefinition;
 import org.wso2.siddhi.query.api.definition.Attribute;
-import org.wso2.siddhi.query.api.exception.ExecutionPlanValidationException;
+import org.wso2.siddhi.query.api.exception.SiddhiAppValidationException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Operator which is related to find the maximum clique size of a graph.
  */
+@Extension(
+        name = "lcc",
+        namespace = "graph",
+        description = "test",
+        parameters = {
+                @Parameter(
+                        name = "p1",
+                        description = "Description here",
+                        type = {DataType.STRING}),
+                @Parameter(
+                        name = "p2",
+                        description = "Description here",
+                        type = {DataType.STRING}),
+                @Parameter(
+                        name = "p3",
+                        description = "Description here",
+                        type = {DataType.BOOL}),
+        },
+        returnAttributes = @ReturnAttribute(
+                name = "someValue",
+                description = "The absolute value of the input parameter",
+                type = {DataType.LONG}),
+        examples = @Example(
+        description = "Example for LargestConnectedComponent",
+        syntax = "define stream cseEventStream (node1 String, node2 String, notifyUpdate int); \n" +
+                "from cseEventStream#graph:lcc(node1,node2,false) \n" +
+                "select largestConnectedComponent \n" +
+                "insert all events into outputStream ;")
+)
+
 public class LargestConnectedComponentProcessor extends StreamProcessor {
     private VariableExpressionExecutor variableExpressionId;
     private VariableExpressionExecutor variableExpressionFriendId;
@@ -77,18 +114,19 @@ public class LargestConnectedComponentProcessor extends StreamProcessor {
         nextProcessor.process(streamEventChunk);
     }
 
+
     /**
      * The init method of the MaximumCliqueStreamProcessor,
      * this method will be called before other methods
      *
      * @param inputDefinition              the incoming stream definition
      * @param attributeExpressionExecutors the executors of each function parameters
-     * @param executionPlanContext         the context of the execution plan
+     * @param siddhiAppContext              the context of the execution plan
      * @return the additional output attributes introduced by the function
      */
     @Override
     protected List<Attribute> init(AbstractDefinition inputDefinition, ExpressionExecutor[]
-            attributeExpressionExecutors, ExecutionPlanContext executionPlanContext) {
+            attributeExpressionExecutors, ConfigReader configReader, SiddhiAppContext siddhiAppContext) {
         if (attributeExpressionExecutors.length != 3) {
             throw new UnsupportedOperationException("Invalid no of arguments passed to " +
                     "graph:LargestConnectedComponentProcessor," + "required 3, but found" +
@@ -112,13 +150,13 @@ public class LargestConnectedComponentProcessor extends StreamProcessor {
                 if (attributeExpressionExecutors[2].getReturnType() == Attribute.Type.BOOL) {
                     notifyUpdates = (Boolean) ((ConstantExpressionExecutor) attributeExpressionExecutors[2]).getValue();
                 } else {
-                    throw new ExecutionPlanValidationException("LargestConnectedComponentProcessor's" +
+                    throw new SiddhiAppValidationException("LargestConnectedComponentProcessor's" +
                             " third parameter attribute should be a boolean value, but found " +
                             attributeExpressionExecutors[0].getReturnType());
                 }
 
             } else {
-                throw new ExecutionPlanValidationException("LargestConnectedComponentProcessor should have constant" +
+                throw new SiddhiAppValidationException("LargestConnectedComponentProcessor should have constant" +
                         " parameter attribute but found a dynamic attribute " + attributeExpressionExecutors[2].
                         getClass().getCanonicalName());
             }
@@ -149,15 +187,15 @@ public class LargestConnectedComponentProcessor extends StreamProcessor {
         boolean traversalPerformed;
         do {
             traversalPerformed = false;
-            for (String userId : pegasusMap.keySet()) {
-                for (String referUserId : pegasusMap.keySet()) {
-                    if (graph.existsEdge(userId, referUserId)) {
+            for (Map.Entry<String, Long> userEntry : pegasusMap.entrySet()) {
+                for (Map.Entry<String, Long> referUserEntry : pegasusMap.entrySet()) {
+                    if (graph.existsEdge(userEntry.getKey(), referUserEntry.getKey())) {
 
-                        if (pegasusMap.get(userId) > pegasusMap.get(referUserId)) {
-                            pegasusMap.replace(userId, pegasusMap.get(referUserId));
+                        if (pegasusMap.get(userEntry.getKey()) > referUserEntry.getValue()) {
+                            pegasusMap.replace(userEntry.getKey(), referUserEntry.getValue());
                             traversalPerformed = true;
-                        } else if (pegasusMap.get(userId) < pegasusMap.get(referUserId)) {
-                            pegasusMap.replace(referUserId, pegasusMap.get(userId));
+                        } else if (userEntry.getValue() < referUserEntry.getValue()) {
+                            pegasusMap.replace(referUserEntry.getKey(), userEntry.getValue());
                             traversalPerformed = true;
                         }
                     }
@@ -209,26 +247,15 @@ public class LargestConnectedComponentProcessor extends StreamProcessor {
 
     }
 
-    /**
-     * Used to collect the serializable state of the processing element, that need to be
-     * persisted for reconstructing the element to the same state at a different point of time
-     *
-     * @return stateful objects of the processing element as an array
-     */
+
     @Override
-    public Object[] currentState() {
-        return new Object[0];
+    public Map<String, Object> currentState() {
+        return null;
     }
 
-    /**
-     * Used to restore serialized state of the processing element, for reconstructing
-     * the element to the same state as if was on a previous point of time.
-     *
-     * @param state the stateful objects of the element as an array on the same order provided
-     *              by currentState().
-     */
     @Override
-    public void restoreState(Object[] state) {
+    public void restoreState(Map<String, Object> state) {
 
     }
+
 }
