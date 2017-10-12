@@ -1,7 +1,7 @@
 siddhi-execution-graph
 ======================================
 
-The **siddhi-execution-graph extension** is an extension to <a target="_blank" href="https://wso2.github.io/siddhi">Siddhi</a> that provides graph related functionality to Siddhi such as getting current graph, current date, manipulating/formatting dates and etc.
+The **siddhi-execution-graph extension** is an extension to <a target="_blank" href="https://wso2.github.io/siddhi">Siddhi</a> that provides graph related functionality to Siddhi such as getting current graph, size of largest connected component of a graph, maximum clique size of a graph and etc.
 
 Find some useful links below:
 
@@ -11,7 +11,7 @@ Find some useful links below:
 
 ## Latest API Docs 
 
-Latest API Docs is <a target="_blank" href="https://wso2-extensions.github.io/siddhi-execution-graph/api/1.0.0-SNAPSHOT">1.0.0-SNAPSHOT</a>.
+Latest API Docs is <a target="_blank" href="https://wso2-extensions.github.io/siddhi-execution-graph/api/4.0.4-SNAPSHOT">4.0.4-SNAPSHOT</a>.
 
 ## How to use 
 
@@ -45,8 +45,8 @@ Latest API Docs is <a target="_blank" href="https://wso2-extensions.github.io/si
 
 ## Features
 
-* <a target="_blank" href="https://wso2-extensions.github.io/siddhi-execution-graph/api/1.0.0-SNAPSHOT/#lcc-stream-processor">lcc</a> *(<a target="_blank" href="https://wso2.github.io/siddhi/documentation/siddhi-4.0/#stream-processors">Stream Processor</a>)*<br><div style="padding-left: 1em;"><p>test</p></div>
-* <a target="_blank" href="https://wso2-extensions.github.io/siddhi-execution-graph/api/1.0.0-SNAPSHOT/#maximumclique-stream-processor">maximumClique</a> *(<a target="_blank" href="https://wso2.github.io/siddhi/documentation/siddhi-4.0/#stream-processors">Stream Processor</a>)*<br><div style="padding-left: 1em;"><p>test</p></div>
+* <a target="_blank" href="https://wso2-extensions.github.io/siddhi-execution-graph/api/4.0.4-SNAPSHOT/#sizeoflargestconnectedcomponent-stream-processor">sizeOfLargestConnectedComponent</a> *(<a target="_blank" href="https://wso2.github.io/siddhi/documentation/siddhi-4.0/#stream-processors">Stream Processor</a>)*<br><div style="padding-left: 1em;"><p>Returns the size of the largest connected component of a graph</p></div>
+* <a target="_blank" href="https://wso2-extensions.github.io/siddhi-execution-graph/api/4.0.4-SNAPSHOT/#maximumclique-stream-processor">maximumClique</a> *(<a target="_blank" href="https://wso2.github.io/siddhi/documentation/siddhi-4.0/#stream-processors">Stream Processor</a>)*<br><div style="padding-left: 1em;"><p>Returns the size of the maximum clique of a graph</p></div>
 
 ## How to Contribute
  

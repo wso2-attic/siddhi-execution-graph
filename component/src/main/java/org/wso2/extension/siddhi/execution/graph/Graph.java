@@ -25,6 +25,12 @@ import java.util.Set;
  * This class is used to generate the graph from the stream data
  */
 public class Graph {
+
+    /**
+     * Map that holds a  list of adjacent vertices for each vertex in the graph
+     * Key of the map is id of all vertices
+     * Value of the map is the list of adjacent vertex ids to a given vertex
+     */
     private HashMap<String, Set<String>> adjacencyList = new HashMap<String, Set<String>>(10000);
 
     /**
@@ -53,6 +59,7 @@ public class Graph {
         if (!adjacencyList.get(user2).contains(user1)) {
             adjacencyList.get(user2).add(user1);
         }
+
     }
 
     /**

@@ -43,39 +43,43 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Operator which is related to find the maximum clique size of a graph.
+ * Operator which is related to find the size of the largest connected component of a graph.
  */
 @Extension(
-        name = "lcc",
+        name = "sizeOfLargestConnectedComponent",
         namespace = "graph",
-        description = "test",
+        description = "Returns the size of the largest connected component of a graph",
         parameters = {
                 @Parameter(
-                        name = "p1",
-                        description = "Description here",
+                        name = "main.vertex",
+                        description = "This is the ID of the main vertex that is used to create the graph",
                         type = {DataType.STRING}),
                 @Parameter(
-                        name = "p2",
-                        description = "Description here",
+                        name = "refer.vertex",
+                        description = "This is the ID of the refer vertex that connects with the main vertex in the " +
+                                "graph",
                         type = {DataType.STRING}),
                 @Parameter(
-                        name = "p3",
-                        description = "Description here",
+                        name = "notify.update",
+                        description = "This will give an alert if there is any update in the largest connected" +
+                                "component of the graph",
                         type = {DataType.BOOL}),
         },
         returnAttributes = @ReturnAttribute(
-                name = "someValue",
-                description = "The absolute value of the input parameter",
+                name = "sizeOfLargestConnectedComponent",
+                description = "Size of the largest connected component of a graph",
                 type = {DataType.LONG}),
         examples = @Example(
-        description = "Example for LargestConnectedComponent",
-        syntax = "define stream cseEventStream (node1 String, node2 String, notifyUpdate int); \n" +
-                "from cseEventStream#graph:lcc(node1,node2,false) \n" +
-                "select largestConnectedComponent \n" +
+        description = "Example for LargestConnectedComponent\n" +
+                "This will return size of the largest connected component of a given graph.",
+        syntax = "define stream cseEventStream (vertex1 String, vertex2 String); \n" +
+                "from cseEventStream#graph:sizeOfLargestConnectedComponent(vertex1,vertex2,false) \n" +
+                "select sizeOfLargestConnectedComponent \n" +
                 "insert all events into outputStream ;")
 )
 
 public class LargestConnectedComponentProcessor extends StreamProcessor {
+
     private VariableExpressionExecutor variableExpressionId;
     private VariableExpressionExecutor variableExpressionFriendId;
     private Graph graph = new Graph();
@@ -97,9 +101,9 @@ public class LargestConnectedComponentProcessor extends StreamProcessor {
         synchronized (this) {
             while (streamEventChunk.hasNext()) {
                 StreamEvent event = streamEventChunk.next();
-                String id = (String) variableExpressionId.execute(event);
-                String friendsId = (String) variableExpressionFriendId.execute(event);
-                graph.addEdge(id, friendsId);
+                String vertexOneId = (String) variableExpressionId.execute(event);
+                String vertexTwoId = (String) variableExpressionFriendId.execute(event);
+                graph.addEdge(vertexOneId, vertexTwoId);
                 long newLargestConnectedComponent = getLargestConnectedComponent();
                 if (largestConnectedComponentSize != newLargestConnectedComponent) {
                     largestConnectedComponentSize = newLargestConnectedComponent;
@@ -116,11 +120,12 @@ public class LargestConnectedComponentProcessor extends StreamProcessor {
 
 
     /**
-     * The init method of the MaximumCliqueStreamProcessor,
+     * The init method of the LargestConnectedComponentProcessor,
      * this method will be called before other methods
      *
      * @param inputDefinition              the incoming stream definition
      * @param attributeExpressionExecutors the executors of each function parameters
+     * @param configReader                 explain here
      * @param siddhiAppContext              the context of the execution plan
      * @return the additional output attributes introduced by the function
      */
@@ -129,19 +134,19 @@ public class LargestConnectedComponentProcessor extends StreamProcessor {
             attributeExpressionExecutors, ConfigReader configReader, SiddhiAppContext siddhiAppContext) {
         if (attributeExpressionExecutors.length != 3) {
             throw new UnsupportedOperationException("Invalid no of arguments passed to " +
-                    "graph:LargestConnectedComponentProcessor," + "required 3, but found" +
+                    "graph:sizeOfLargestConnectedComponent," + "required 3, but found" +
                     attributeExpressionExecutors.length);
         } else {
             if (!(attributeExpressionExecutors[0] instanceof VariableExpressionExecutor)) {
                 throw new UnsupportedOperationException("Invalid parameter found for the firs" +
-                        "t parameter of graph:LargestConnectedComponentProcessor, Required a variable," +
+                        "t parameter of graph:sizeOfLargestConnectedComponent, Required a variable," +
                         " but found a constant parameter  " + attributeExpressionExecutors[0].getReturnType());
             } else {
                 variableExpressionId = (VariableExpressionExecutor) attributeExpressionExecutors[0];
             }
             if (!(attributeExpressionExecutors[1] instanceof VariableExpressionExecutor)) {
                 throw new UnsupportedOperationException("Invalid parameter found for the second" +
-                        " parameter of graph:LargestConnectedComponentProcessor, Required a variable," +
+                        " parameter of graph:sizeOfLargestConnectedComponent, Required a variable," +
                         " but found a constant parameter " + attributeExpressionExecutors[1].getReturnType());
             } else {
                 variableExpressionFriendId = (VariableExpressionExecutor) attributeExpressionExecutors[1];
@@ -150,19 +155,19 @@ public class LargestConnectedComponentProcessor extends StreamProcessor {
                 if (attributeExpressionExecutors[2].getReturnType() == Attribute.Type.BOOL) {
                     notifyUpdates = (Boolean) ((ConstantExpressionExecutor) attributeExpressionExecutors[2]).getValue();
                 } else {
-                    throw new SiddhiAppValidationException("LargestConnectedComponentProcessor's" +
+                    throw new SiddhiAppValidationException("sizeOfLargestConnectedComponent's" +
                             " third parameter attribute should be a boolean value, but found " +
-                            attributeExpressionExecutors[0].getReturnType());
+                            attributeExpressionExecutors[2].getReturnType());
                 }
 
             } else {
-                throw new SiddhiAppValidationException("LargestConnectedComponentProcessor should have constant" +
+                throw new SiddhiAppValidationException("LargestConnectedComponent should have constant" +
                         " parameter attribute but found a dynamic attribute " + attributeExpressionExecutors[2].
                         getClass().getCanonicalName());
             }
         }
         List<Attribute> attributeList = new ArrayList<Attribute>();
-        attributeList.add(new Attribute("largestConnectedComponent", Attribute.Type.LONG));
+        attributeList.add(new Attribute("size", Attribute.Type.LONG));
         return attributeList;
     }
 
@@ -171,7 +176,7 @@ public class LargestConnectedComponentProcessor extends StreamProcessor {
      *
      * @return the number of vertices in the largest connected component
      */
-    public long getLargestConnectedComponent() {
+    private long getLargestConnectedComponent() {
 
         if (graph.size() == 0) {
             return 0L;
@@ -187,15 +192,15 @@ public class LargestConnectedComponentProcessor extends StreamProcessor {
         boolean traversalPerformed;
         do {
             traversalPerformed = false;
-            for (Map.Entry<String, Long> userEntry : pegasusMap.entrySet()) {
-                for (Map.Entry<String, Long> referUserEntry : pegasusMap.entrySet()) {
-                    if (graph.existsEdge(userEntry.getKey(), referUserEntry.getKey())) {
+            for (Map.Entry<String, Long> mainVertex : pegasusMap.entrySet()) {
+                for (Map.Entry<String, Long> referVertex : pegasusMap.entrySet()) {
+                    if (graph.existsEdge(mainVertex.getKey(), referVertex.getKey())) {
 
-                        if (pegasusMap.get(userEntry.getKey()) > referUserEntry.getValue()) {
-                            pegasusMap.replace(userEntry.getKey(), referUserEntry.getValue());
+                        if (mainVertex.getValue() > referVertex.getValue()) {
+                            pegasusMap.replace(mainVertex.getKey(), referVertex.getValue());
                             traversalPerformed = true;
-                        } else if (userEntry.getValue() < referUserEntry.getValue()) {
-                            pegasusMap.replace(referUserEntry.getKey(), userEntry.getValue());
+                        } else if (referVertex.getValue() > mainVertex.getValue()) {
+                            pegasusMap.replace(referVertex.getKey(), mainVertex.getValue());
                             traversalPerformed = true;
                         }
                     }
@@ -206,17 +211,17 @@ public class LargestConnectedComponentProcessor extends StreamProcessor {
     }
 
     /**
-     * Calculates the size largest connected component
+     * Calculates the size of largest connected component
      *
      * @param pegasusMap is the reference to the pegasusmap
      * @return size of largest connected component
      */
     private long calculateLargestComponent(HashMap<String, Long> pegasusMap) {
         long largestComponent = 0;
-        for (Long nodeId : pegasusMap.values()) {
+        for (Long pegasusValue : pegasusMap.values()) {
             int count = 0;
-            for (Long referNodeId : pegasusMap.values()) {
-                if (nodeId.equals(referNodeId)) {
+            for (Long referPegasusValue : pegasusMap.values()) {
+                if (pegasusValue.equals(referPegasusValue)) {
                     count++;
                 }
             }

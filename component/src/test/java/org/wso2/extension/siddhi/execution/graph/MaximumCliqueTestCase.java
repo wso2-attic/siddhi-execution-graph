@@ -49,9 +49,9 @@ public class MaximumCliqueTestCase {
 
         SiddhiManager siddhiManager = new SiddhiManager();
 
-        String cseEventStream = "define stream cseEventStream (id String, friendsId String, volume int);";
+        String cseEventStream = "define stream cseEventStream (vertex1 String, vertex2 String);";
         String query = "" + "@info(name = 'query1') " +
-                "from cseEventStream#graph:maximumClique(id,friendsId,false) " +
+                "from cseEventStream#graph:maximumClique(vertex1,vertex2,false) " +
                 "select maximumClique " +
                 "insert all events into outputStream ;";
 
@@ -70,14 +70,32 @@ public class MaximumCliqueTestCase {
 
         InputHandler inputHandler = siddhiAppRuntime.getInputHandler("cseEventStream");
         siddhiAppRuntime.start();
-        inputHandler.send(new Object[]{"1234", "2345", 0});
+        inputHandler.send(new Object[]{"11", "12"});
+        Thread.sleep(1000);
+        inputHandler.send(new Object[]{"11", "15"});
+        Thread.sleep(1000);
+        inputHandler.send(new Object[]{"12", "15"});
+        Thread.sleep(1000);
+        inputHandler.send(new Object[]{"12", "13"});
+        Thread.sleep(1000);
+        inputHandler.send(new Object[]{"12", "14"});
+        Thread.sleep(1000);
+        inputHandler.send(new Object[]{"13", "15"});
+        Thread.sleep(1000);
+        inputHandler.send(new Object[]{"13", "14"});
+        Thread.sleep(1000);
+        inputHandler.send(new Object[]{"14", "15"});
+        Thread.sleep(4000);
+        /*inputHandler.send(new Object[]{"1234", "2345", 0});
         Thread.sleep(1000);
         inputHandler.send(new Object[]{"2345", "5678", 1});
         Thread.sleep(1000);
         inputHandler.send(new Object[]{"5678", "1234", 3});
-        Thread.sleep(4000);
-        Assert.assertEquals(2, count.get());
+        Thread.sleep(4000);*/
+        Assert.assertEquals(3, count.get());
         Assert.assertTrue(eventArrived);
         siddhiAppRuntime.shutdown();
+
+
     }
 }

@@ -50,34 +50,38 @@ import java.util.Set;
 @Extension(
         name = "maximumClique",
         namespace = "graph",
-        description = "test",
+        description = "Returns the size of the maximum clique of a graph",
         parameters = {
                 @Parameter(
-                        name = "p1",
-                        description = "Description here",
+                        name = "main.vertex",
+                        description = "This is the ID of the main vertex that is used to create a graph",
                         type = {DataType.STRING}),
                 @Parameter(
-                        name = "p2",
-                        description = "Description here",
+                        name = "refer.vertex",
+                        description = "This is the ID of the refer vertex that connects with the main vertex in the" +
+                                "graph",
                         type = {DataType.STRING}),
                 @Parameter(
-                        name = "p3",
-                        description = "Description here",
-                        type = {DataType.INT}),
+                        name = "notify.update",
+                        description = "It will give an alert if there is any update in the maximum clique " +
+                                "of the graph",
+                        type = {DataType.BOOL}),
         },
         returnAttributes = @ReturnAttribute(
-                name = "someValue",
-                description = "The absolute value of the input parameter",
+                name = "sizeOfMaximumClick",
+                description = "Size of the maximum click of the graph",
                 type = {DataType.INT}),
         examples = @Example(
-                description = "Example for MaximumCliqueStreamProcessor",
-                syntax = "define stream cseEventStream (node1 String, node2 String, notifyUpdate int); \n" +
-                        "from cseEventStream#graph:maximumClique(id,friendsId,false)  \n" +
+                description = "Example for MaximumClique\n" +
+                        "This will return the maximum clique of a given graph.",
+                syntax = "define stream cseEventStream (vertex1 String, vertex2 String); \n" +
+                        "from cseEventStream#graph:maximumClique(vertex1,vertex2,false)  \n" +
                         "select maximumClique  \n" +
                         "insert all events into outputStream ;")
 )
 
 public class MaximumCliqueStreamProcessor extends StreamProcessor {
+
     private VariableExpressionExecutor variableExpressionId;
     private VariableExpressionExecutor variableExpressionFriendId;
     private Graph graph = new Graph();
@@ -130,19 +134,19 @@ public class MaximumCliqueStreamProcessor extends StreamProcessor {
             attributeExpressionExecutors, ConfigReader configReader, SiddhiAppContext siddhiAppContext) {
         if (attributeExpressionExecutors.length != 3) {
             throw new UnsupportedOperationException("Invalid no of arguments passed to " +
-                    "graph:MaximumCliqueStreamProcessor," + "required 3, but found" +
+                    "graph:maximumClique," + "required 3, but found" +
                     attributeExpressionExecutors.length);
         } else {
             if (!(attributeExpressionExecutors[0] instanceof VariableExpressionExecutor)) {
                 throw new UnsupportedOperationException("Invalid parameter found for the first parameter " +
-                        "of graph:MaximumCliqueStreamProcessor, Required a variable, but found a constant parameter  " +
+                        "of graph:maximumClique, Required a variable, but found a constant parameter  " +
                         attributeExpressionExecutors[0].getReturnType());
             } else {
                 variableExpressionId = (VariableExpressionExecutor) attributeExpressionExecutors[0];
             }
             if (!(attributeExpressionExecutors[1] instanceof VariableExpressionExecutor)) {
                 throw new UnsupportedOperationException("Invalid parameter found for the second parameter" +
-                        " of graph:MaximumCliqueStreamProcessor, Required a variable, but found a constant parameter " +
+                        " of graph:maximumClique, Required a variable, but found a constant parameter " +
                         attributeExpressionExecutors[0].getReturnType());
             } else {
                 variableExpressionFriendId = (VariableExpressionExecutor) attributeExpressionExecutors[1];
@@ -151,12 +155,12 @@ public class MaximumCliqueStreamProcessor extends StreamProcessor {
                 if (attributeExpressionExecutors[2].getReturnType() == Attribute.Type.BOOL) {
                     notifyUpdates = (Boolean) ((ConstantExpressionExecutor) attributeExpressionExecutors[2]).getValue();
                 } else {
-                    throw new SiddhiAppValidationException("MaximumCliqueStreamProcessor's third parameter " +
+                    throw new SiddhiAppValidationException("MaximumClique's third parameter " +
                             "attribute should be a boolean value, but found " + attributeExpressionExecutors[0].
                             getReturnType());
                 }
             } else {
-                throw new SiddhiAppValidationException("MaximumCliqueStreamProcessor should have constant" +
+                throw new SiddhiAppValidationException("MaximumClique should have constant" +
                         " parameter attribute but found a dynamic attribute " + attributeExpressionExecutors[2].
                         getClass().getCanonicalName());
             }

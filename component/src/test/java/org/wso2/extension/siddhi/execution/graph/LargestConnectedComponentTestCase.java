@@ -50,10 +50,10 @@ public class LargestConnectedComponentTestCase {
         SiddhiManager siddhiManager = new SiddhiManager();
 
         String cseEventStream = "" +
-                "define stream cseEventStream (node1 String, node2 String, notifyUpdate int);";
+                "define stream cseEventStream (vertex1 String, vertex2 String);";
         String query = "" + "@info(name = 'query1') " +
-                "from cseEventStream#graph:lcc(node1,node2,false) " +
-                "select largestConnectedComponent " + "insert all events into outputStream ;";
+                "from cseEventStream#graph:sizeOfLargestConnectedComponent(vertex1,vertex2,false) " +
+                "select * " + "insert all events into outputStream ;";
 
         SiddhiAppRuntime siddhiAppRuntime = siddhiManager.createSiddhiAppRuntime(cseEventStream + query);
 
@@ -70,19 +70,19 @@ public class LargestConnectedComponentTestCase {
 
         InputHandler inputHandler = siddhiAppRuntime.getInputHandler("cseEventStream");
         siddhiAppRuntime.start();
-        inputHandler.send(new Object[]{"1234", "2345", 0});
+        inputHandler.send(new Object[]{"1234", "2345"});
         Thread.sleep(1000);
-        inputHandler.send(new Object[]{"2345", "5678", 1});
+        inputHandler.send(new Object[]{"2345", "5678"});
         Thread.sleep(1000);
-        inputHandler.send(new Object[]{"5678", "1234", 3});
+        inputHandler.send(new Object[]{"5678", "1234"});
         Thread.sleep(1000);
-        inputHandler.send(new Object[]{"5522", "3322", 3});
+        inputHandler.send(new Object[]{"5522", "3322"});
         Thread.sleep(1000);
-        inputHandler.send(new Object[]{"3322", "4567", 3});
+        inputHandler.send(new Object[]{"3322", "4567"});
         Thread.sleep(1000);
-        inputHandler.send(new Object[]{"4567", "7890", 3});
+        inputHandler.send(new Object[]{"4567", "7890"});
         Thread.sleep(1000);
-        inputHandler.send(new Object[]{"7890", "5428", 3});
+        inputHandler.send(new Object[]{"7890", "5428"});
         Thread.sleep(4000);
         Assert.assertEquals(4, count.get());
         Assert.assertTrue(eventArrived);
