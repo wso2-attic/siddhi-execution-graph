@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+ * Copyright (c) 2017, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
  *
  * WSO2 Inc. licenses this file to you under the Apache License,
  * Version 2.0 (the "License"); you may not use this file except
@@ -18,12 +18,13 @@
 package org.wso2.extension.siddhi.execution.graph;
 
 import org.apache.log4j.Logger;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.testng.Assert;
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.Test;
 import org.wso2.siddhi.core.SiddhiAppRuntime;
 import org.wso2.siddhi.core.SiddhiManager;
 import org.wso2.siddhi.core.event.Event;
+import org.wso2.siddhi.core.exception.SiddhiAppCreationException;
 import org.wso2.siddhi.core.query.output.callback.QueryCallback;
 import org.wso2.siddhi.core.stream.input.InputHandler;
 import org.wso2.siddhi.core.util.EventPrinter;
@@ -38,7 +39,7 @@ public class LargestConnectedComponentTestCase {
     private AtomicInteger count = new AtomicInteger(0);
     private boolean eventArrived;
 
-    @Before
+    @BeforeClass
     public void init() {
         count.set(0);
         eventArrived = false;
@@ -88,5 +89,73 @@ public class LargestConnectedComponentTestCase {
         Assert.assertTrue(eventArrived);
         siddhiAppRuntime.shutdown();
     }
+
+    @Test(expectedExceptions = SiddhiAppCreationException.class)
+    public void largestConnectedComponentTest2() throws InterruptedException {
+
+        log.info("LargestConnectedComponentTestCaseInvalidNoOfArguments");
+        SiddhiManager siddhiManager = new SiddhiManager();
+
+        String cseEventStream = "" +
+                "define stream cseEventStream (vertex1 String, vertex2 String, modifyUpdate bool, parameter4 String);";
+        String query = "" + "@info(name = 'query1') " +
+                "from cseEventStream#graph:sizeOfLargestConnectedComponent(vertex1,vertex2,false,parameter4) " +
+                "select * " + "insert all events into outputStream ;";
+
+        siddhiManager.createSiddhiAppRuntime(cseEventStream + query);
+
+    }
+
+    @Test(expectedExceptions = SiddhiAppCreationException.class)
+    public void largestConnectedComponentTest3() throws InterruptedException {
+
+        log.info("LargestConnectedComponentTestCaseInvalidParameterTypeInFirstArgument");
+
+        SiddhiManager siddhiManager = new SiddhiManager();
+
+        String cseEventStream = "" +
+                "define stream cseEventStream (vertex1 bool, vertex2 String, modifyUpdate bool);";
+        String query = "" + "@info(name = 'query1') " +
+                "from cseEventStream#graph:sizeOfLargestConnectedComponent(true,vertex2,false) " +
+                "select * " + "insert all events into outputStream ;";
+
+        siddhiManager.createSiddhiAppRuntime(cseEventStream + query);
+
+    }
+
+    @Test(expectedExceptions = SiddhiAppCreationException.class)
+    public void largestConnectedComponentTest4() throws InterruptedException {
+
+        log.info("LargestConnectedComponentTestCaseInvalidParameterTypeInSecondArgument");
+
+        SiddhiManager siddhiManager = new SiddhiManager();
+
+        String cseEventStream = "" +
+                "define stream cseEventStream (vertex1 String, vertex2 bool, modifyUpdate bool);";
+        String query = "" + "@info(name = 'query1') " +
+                "from cseEventStream#graph:sizeOfLargestConnectedComponent(vertex1,true,false) " +
+                "select * " + "insert all events into outputStream ;";
+
+        siddhiManager.createSiddhiAppRuntime(cseEventStream + query);
+
+    }
+
+    @Test(expectedExceptions = SiddhiAppCreationException.class)
+    public void largestConnectedComponentTest5() throws InterruptedException {
+
+        log.info("LargestConnectedComponentTestCaseInvalidParameterTypeInThirdArgument");
+
+        SiddhiManager siddhiManager = new SiddhiManager();
+
+        String cseEventStream = "" +
+                "define stream cseEventStream (vertex1 String, vertex2 String, modifyUpdate String);";
+        String query = "" + "@info(name = 'query1') " +
+                "from cseEventStream#graph:sizeOfLargestConnectedComponent(vertex1,vertex2,modifyUpdate) " +
+                "select * " + "insert all events into outputStream ;";
+
+        siddhiManager.createSiddhiAppRuntime(cseEventStream + query);
+
+    }
+
 
 }

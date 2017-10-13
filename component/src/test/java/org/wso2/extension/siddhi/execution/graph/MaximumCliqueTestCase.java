@@ -18,12 +18,13 @@
 package org.wso2.extension.siddhi.execution.graph;
 
 import org.apache.log4j.Logger;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.testng.Assert;
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.Test;
 import org.wso2.siddhi.core.SiddhiAppRuntime;
 import org.wso2.siddhi.core.SiddhiManager;
 import org.wso2.siddhi.core.event.Event;
+import org.wso2.siddhi.core.exception.SiddhiAppCreationException;
 import org.wso2.siddhi.core.query.output.callback.QueryCallback;
 import org.wso2.siddhi.core.stream.input.InputHandler;
 import org.wso2.siddhi.core.util.EventPrinter;
@@ -38,7 +39,7 @@ public class MaximumCliqueTestCase {
     private AtomicInteger count = new AtomicInteger(0);
     private boolean eventArrived;
 
-    @Before
+    @BeforeClass
     public void init() {
         count.set(0);
         eventArrived = false;
@@ -86,16 +87,72 @@ public class MaximumCliqueTestCase {
         Thread.sleep(1000);
         inputHandler.send(new Object[]{"14", "15"});
         Thread.sleep(4000);
-        /*inputHandler.send(new Object[]{"1234", "2345", 0});
-        Thread.sleep(1000);
-        inputHandler.send(new Object[]{"2345", "5678", 1});
-        Thread.sleep(1000);
-        inputHandler.send(new Object[]{"5678", "1234", 3});
-        Thread.sleep(4000);*/
         Assert.assertEquals(3, count.get());
         Assert.assertTrue(eventArrived);
         siddhiAppRuntime.shutdown();
+    }
 
+    @Test(expectedExceptions = SiddhiAppCreationException.class)
+    public void maximumCliqueTest2() throws InterruptedException {
+
+        log.info("MaximumCliqueTestCaseInvalidNoOfArguments");
+        SiddhiManager siddhiManager = new SiddhiManager();
+
+        String cseEventStream = "" +
+                "define stream cseEventStream (vertex1 String, vertex2 String, modifyUpdate bool, parameter4 String);";
+        String query = "" + "@info(name = 'query1') " +
+                "from cseEventStream#graph:maximumClique(vertex1,vertex2,false,parameter4) " +
+                "select * " + "insert all events into outputStream ;";
+
+        siddhiManager.createSiddhiAppRuntime(cseEventStream + query);
+
+    }
+
+    @Test(expectedExceptions = SiddhiAppCreationException.class)
+    public void maximumCliqueTest3() {
+
+        log.info("MaximumCliqueTestCaseInvalidParameterTypeInFirstArgument");
+        SiddhiManager siddhiManager = new SiddhiManager();
+
+        String cseEventStream = "" +
+                "define stream cseEventStream (vertex1 bool, vertex2 String, modifyUpdate bool);";
+        String query = "" + "@info(name = 'query1') " +
+                "from cseEventStream#graph:maximumClique(true,vertex2,false) " +
+                "select * " + "insert all events into outputStream ;";
+
+        siddhiManager.createSiddhiAppRuntime(cseEventStream + query);
+
+    }
+
+    @Test(expectedExceptions = SiddhiAppCreationException.class)
+    public void maximumCliqueTest4() {
+
+        log.info("MaximumCliqueTestCaseInvalidParameterTypeInSecondArgument");
+        SiddhiManager siddhiManager = new SiddhiManager();
+
+        String cseEventStream = "" +
+                "define stream cseEventStream (vertex1 String, vertex2 bool, modifyUpdate bool);";
+        String query = "" + "@info(name = 'query1') " +
+                "from cseEventStream#graph:maximumClique(vertex1,true,false) " +
+                "select * " + "insert all events into outputStream ;";
+
+        siddhiManager.createSiddhiAppRuntime(cseEventStream + query);
+
+    }
+
+    @Test(expectedExceptions = SiddhiAppCreationException.class)
+    public void maximumCliqueTest5() {
+
+        log.info("MaximumCliqueTestCaseInvalidParameterTypeInThirdArgument");
+        SiddhiManager siddhiManager = new SiddhiManager();
+
+        String cseEventStream = "" +
+                "define stream cseEventStream (vertex1 String, vertex2 String, modifyUpdate String);";
+        String query = "" + "@info(name = 'query1') " +
+                "from cseEventStream#graph:maximumClique(vertex1,vertex2,modifyUpdate) " +
+                "select * " + "insert all events into outputStream ;";
+
+        siddhiManager.createSiddhiAppRuntime(cseEventStream + query);
 
     }
 }

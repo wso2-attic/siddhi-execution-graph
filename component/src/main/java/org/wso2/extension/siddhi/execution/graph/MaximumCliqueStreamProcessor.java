@@ -147,7 +147,7 @@ public class MaximumCliqueStreamProcessor extends StreamProcessor {
             if (!(attributeExpressionExecutors[1] instanceof VariableExpressionExecutor)) {
                 throw new UnsupportedOperationException("Invalid parameter found for the second parameter" +
                         " of graph:maximumClique, Required a variable, but found a constant parameter " +
-                        attributeExpressionExecutors[0].getReturnType());
+                        attributeExpressionExecutors[1].getReturnType());
             } else {
                 variableExpressionFriendId = (VariableExpressionExecutor) attributeExpressionExecutors[1];
             }
@@ -156,7 +156,7 @@ public class MaximumCliqueStreamProcessor extends StreamProcessor {
                     notifyUpdates = (Boolean) ((ConstantExpressionExecutor) attributeExpressionExecutors[2]).getValue();
                 } else {
                     throw new SiddhiAppValidationException("MaximumClique's third parameter " +
-                            "attribute should be a boolean value, but found " + attributeExpressionExecutors[0].
+                            "attribute should be a boolean value, but found " + attributeExpressionExecutors[2].
                             getReturnType());
                 }
             } else {
