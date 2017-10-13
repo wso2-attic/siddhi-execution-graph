@@ -18,7 +18,7 @@
 package org.wso2.extension.siddhi.execution.graph;
 
 import org.apache.log4j.Logger;
-import org.testng.Assert;
+import org.testng.AssertJUnit;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import org.wso2.siddhi.core.SiddhiAppRuntime;
@@ -28,6 +28,7 @@ import org.wso2.siddhi.core.exception.SiddhiAppCreationException;
 import org.wso2.siddhi.core.query.output.callback.QueryCallback;
 import org.wso2.siddhi.core.stream.input.InputHandler;
 import org.wso2.siddhi.core.util.EventPrinter;
+import org.wso2.siddhi.core.util.SiddhiTestHelper;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -38,6 +39,8 @@ public class LargestConnectedComponentTestCase {
     private static final Logger log = Logger.getLogger(LargestConnectedComponentTestCase.class);
     private AtomicInteger count = new AtomicInteger(0);
     private boolean eventArrived;
+    private int waitTime = 50;
+    private int timeout = 2000;
 
     @BeforeClass
     public void init() {
@@ -62,31 +65,30 @@ public class LargestConnectedComponentTestCase {
             @Override
             public void receive(long timeStamp, Event[] inEvents, Event[] removeEvents) {
                 EventPrinter.print(timeStamp, inEvents, removeEvents);
-                for (Event inEvent : inEvents) {
+                for (Event event : inEvents) {
                     count.incrementAndGet();
-                    eventArrived = true;
                 }
+                eventArrived = true;
             }
+
         });
 
         InputHandler inputHandler = siddhiAppRuntime.getInputHandler("cseEventStream");
         siddhiAppRuntime.start();
+
         inputHandler.send(new Object[]{"1234", "2345"});
-        Thread.sleep(1000);
         inputHandler.send(new Object[]{"2345", "5678"});
-        Thread.sleep(1000);
         inputHandler.send(new Object[]{"5678", "1234"});
-        Thread.sleep(1000);
         inputHandler.send(new Object[]{"5522", "3322"});
-        Thread.sleep(1000);
         inputHandler.send(new Object[]{"3322", "4567"});
-        Thread.sleep(1000);
         inputHandler.send(new Object[]{"4567", "7890"});
-        Thread.sleep(1000);
         inputHandler.send(new Object[]{"7890", "5428"});
-        Thread.sleep(4000);
-        Assert.assertEquals(4, count.get());
-        Assert.assertTrue(eventArrived);
+
+        SiddhiTestHelper.waitForEvents(waitTime, 7, count, timeout);
+
+        AssertJUnit.assertEquals(4, count.get());
+        AssertJUnit.assertTrue(eventArrived);
+
         siddhiAppRuntime.shutdown();
     }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+ * Copyright (c) 2017, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
  *
  * WSO2 Inc. licenses this file to you under the Apache License,
  * Version 2.0 (the "License"); you may not use this file except
@@ -18,7 +18,7 @@
 package org.wso2.extension.siddhi.execution.graph;
 
 import org.apache.log4j.Logger;
-import org.testng.Assert;
+import org.testng.AssertJUnit;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import org.wso2.siddhi.core.SiddhiAppRuntime;
@@ -28,6 +28,7 @@ import org.wso2.siddhi.core.exception.SiddhiAppCreationException;
 import org.wso2.siddhi.core.query.output.callback.QueryCallback;
 import org.wso2.siddhi.core.stream.input.InputHandler;
 import org.wso2.siddhi.core.util.EventPrinter;
+import org.wso2.siddhi.core.util.SiddhiTestHelper;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -38,6 +39,8 @@ public class MaximumCliqueTestCase {
     private static final Logger log = Logger.getLogger(MaximumCliqueTestCase.class);
     private AtomicInteger count = new AtomicInteger(0);
     private boolean eventArrived;
+    private int waitTime = 50;
+    private int timeout = 2000;
 
     @BeforeClass
     public void init() {
@@ -64,31 +67,28 @@ public class MaximumCliqueTestCase {
                 EventPrinter.print(timeStamp, inEvents, removeEvents);
                 for (Event inEvent : inEvents) {
                     count.incrementAndGet();
-                    eventArrived = true;
                 }
+                eventArrived = true;
             }
         });
 
         InputHandler inputHandler = siddhiAppRuntime.getInputHandler("cseEventStream");
         siddhiAppRuntime.start();
+
         inputHandler.send(new Object[]{"11", "12"});
-        Thread.sleep(1000);
         inputHandler.send(new Object[]{"11", "15"});
-        Thread.sleep(1000);
         inputHandler.send(new Object[]{"12", "15"});
-        Thread.sleep(1000);
         inputHandler.send(new Object[]{"12", "13"});
-        Thread.sleep(1000);
         inputHandler.send(new Object[]{"12", "14"});
-        Thread.sleep(1000);
         inputHandler.send(new Object[]{"13", "15"});
-        Thread.sleep(1000);
         inputHandler.send(new Object[]{"13", "14"});
-        Thread.sleep(1000);
         inputHandler.send(new Object[]{"14", "15"});
-        Thread.sleep(4000);
-        Assert.assertEquals(3, count.get());
-        Assert.assertTrue(eventArrived);
+
+        SiddhiTestHelper.waitForEvents(waitTime, 8, count, timeout);
+
+        AssertJUnit.assertEquals(3, count.get());
+        AssertJUnit.assertTrue(eventArrived);
+
         siddhiAppRuntime.shutdown();
     }
 
