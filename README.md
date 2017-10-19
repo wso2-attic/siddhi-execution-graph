@@ -11,7 +11,6 @@ Find some useful links below:
 
 ## Latest API Docs 
 
-Latest API Docs is <a target="_blank" href="https://wso2-extensions.github.io/siddhi-execution-graph/api/4.0.4-SNAPSHOT">4.0.4-SNAPSHOT</a>.
 
 ## How to use 
 
@@ -45,8 +44,7 @@ Latest API Docs is <a target="_blank" href="https://wso2-extensions.github.io/si
 
 ## Features
 
-* <a target="_blank" href="https://wso2-extensions.github.io/siddhi-execution-graph/api/4.0.4-SNAPSHOT/#sizeoflargestconnectedcomponent-stream-processor">sizeOfLargestConnectedComponent</a> *(<a target="_blank" href="https://wso2.github.io/siddhi/documentation/siddhi-4.0/#stream-processors">Stream Processor</a>)*<br><div style="padding-left: 1em;"><p>Returns the size of the largest connected component of a graph</p></div>
-* <a target="_blank" href="https://wso2-extensions.github.io/siddhi-execution-graph/api/4.0.4-SNAPSHOT/#maximumclique-stream-processor">maximumClique</a> *(<a target="_blank" href="https://wso2.github.io/siddhi/documentation/siddhi-4.0/#stream-processors">Stream Processor</a>)*<br><div style="padding-left: 1em;"><p>Returns the size of the maximum clique of a graph</p></div>
+
 
 ## How to Contribute
  
