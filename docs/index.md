@@ -1,7 +1,7 @@
 siddhi-execution-graph
 ======================================
 
-The **siddhi-execution-graph extension** is an extension to <a target="_blank" href="https://wso2.github.io/siddhi">Siddhi</a> that provides graph related functionality to Siddhi such as getting size of largest connected component of a graph, maximum clique size of a graph, etc.
+The **siddhi-execution-graph extension** is an extension to <a target="_blank" href="https://wso2.github.io/siddhi">Siddhi</a> that provides graph related functionality to Siddhi such as getting current graph, size of largest connected component of a graph, maximum clique size of a graph and etc.
 
 Find some useful links below:
 
@@ -10,7 +10,6 @@ Find some useful links below:
 * <a target="_blank" href="https://github.com/wso2-extensions/siddhi-execution-graph/issues">Issue tracker</a>
 
 ## Latest API Docs 
-
 
 ## How to use 
 
@@ -43,7 +42,6 @@ Find some useful links below:
 ---
 
 ## Features
-
 
 
 ## How to Contribute
