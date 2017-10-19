@@ -11,6 +11,7 @@ Find some useful links below:
 
 ## Latest API Docs 
 
+Latest API Docs is <a target="_blank" href="https://wso2-extensions.github.io/siddhi-execution-graph/api/1.0.0">1.0.0</a>.
 
 ## How to use 
 
@@ -43,7 +44,6 @@ Find some useful links below:
 ---
 
 ## Features
-
 
 
 ## How to Contribute

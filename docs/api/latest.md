@@ -1,0 +1,140 @@
+# API Docs - v1.0.0
+
+## Graph
+
+### sizeOfLargestConnectedComponent *<a target="_blank" href="https://wso2.github.io/siddhi/documentation/siddhi-4.0/#stream-processor">(Stream Processor)</a>*
+
+<p style="word-wrap: break-word">Returns the size of the largest connected component of a graph</p>
+
+<span id="syntax" class="md-typeset" style="display: block; font-weight: bold;">Syntax</span>
+```
+graph:sizeOfLargestConnectedComponent(<STRING> main.vertex, <STRING> refer.vertex, <BOOL> notify.update)
+```
+
+<span id="query-parameters" class="md-typeset" style="display: block; color: rgba(0, 0, 0, 0.54); font-size: 12.8px; font-weight: bold;">QUERY PARAMETERS</span>
+<table>
+    <tr>
+        <th>Name</th>
+        <th style="min-width: 20em">Description</th>
+        <th>Default Value</th>
+        <th>Possible Data Types</th>
+        <th>Optional</th>
+        <th>Dynamic</th>
+    </tr>
+    <tr>
+        <td style="vertical-align: top">main.vertex</td>
+        <td style="vertical-align: top; word-wrap: break-word">This is the ID of the main vertex that is used to create the graph</td>
+        <td style="vertical-align: top"></td>
+        <td style="vertical-align: top">STRING</td>
+        <td style="vertical-align: top">No</td>
+        <td style="vertical-align: top">No</td>
+    </tr>
+    <tr>
+        <td style="vertical-align: top">refer.vertex</td>
+        <td style="vertical-align: top; word-wrap: break-word">This is the ID of the refer vertex that connects with the main vertex in the graph</td>
+        <td style="vertical-align: top"></td>
+        <td style="vertical-align: top">STRING</td>
+        <td style="vertical-align: top">No</td>
+        <td style="vertical-align: top">No</td>
+    </tr>
+    <tr>
+        <td style="vertical-align: top">notify.update</td>
+        <td style="vertical-align: top; word-wrap: break-word">This will give an alert if there is any update in the largest connectedcomponent of the graph</td>
+        <td style="vertical-align: top"></td>
+        <td style="vertical-align: top">BOOL</td>
+        <td style="vertical-align: top">No</td>
+        <td style="vertical-align: top">No</td>
+    </tr>
+</table>
+<span id="extra-return-attributes" class="md-typeset" style="display: block; font-weight: bold;">Extra Return Attributes</span>
+<table>
+    <tr>
+        <th>Name</th>
+        <th style="min-width: 20em">Description</th>
+        <th>Possible Types</th>
+    </tr>
+    <tr>
+        <td style="vertical-align: top">sizeOfLargestConnectedComponent</td>
+        <td style="vertical-align: top; word-wrap: break-word">Size of the largest connected component of a graph</td>
+        <td style="vertical-align: top">LONG</td>
+    </tr>
+</table>
+
+<span id="examples" class="md-typeset" style="display: block; font-weight: bold;">Examples</span>
+<span id="example-1" class="md-typeset" style="display: block; color: rgba(0, 0, 0, 0.54); font-size: 12.8px; font-weight: bold;">EXAMPLE 1</span>
+```
+define stream cseEventStream (vertex1 String, vertex2 String); 
+from cseEventStream#graph:sizeOfLargestConnectedComponent(vertex1,vertex2,false) 
+select sizeOfLargestConnectedComponent 
+insert all events into outputStream ;
+```
+<p style="word-wrap: break-word">Example for LargestConnectedComponent<br>This will return size of the largest connected component of a given graph.</p>
+
+### maximumClique *<a target="_blank" href="https://wso2.github.io/siddhi/documentation/siddhi-4.0/#stream-processor">(Stream Processor)</a>*
+
+<p style="word-wrap: break-word">Returns the size of the maximum clique of a graph</p>
+
+<span id="syntax" class="md-typeset" style="display: block; font-weight: bold;">Syntax</span>
+```
+graph:maximumClique(<STRING> main.vertex, <STRING> refer.vertex, <BOOL> notify.update)
+```
+
+<span id="query-parameters" class="md-typeset" style="display: block; color: rgba(0, 0, 0, 0.54); font-size: 12.8px; font-weight: bold;">QUERY PARAMETERS</span>
+<table>
+    <tr>
+        <th>Name</th>
+        <th style="min-width: 20em">Description</th>
+        <th>Default Value</th>
+        <th>Possible Data Types</th>
+        <th>Optional</th>
+        <th>Dynamic</th>
+    </tr>
+    <tr>
+        <td style="vertical-align: top">main.vertex</td>
+        <td style="vertical-align: top; word-wrap: break-word">This is the ID of the main vertex that is used to create a graph</td>
+        <td style="vertical-align: top"></td>
+        <td style="vertical-align: top">STRING</td>
+        <td style="vertical-align: top">No</td>
+        <td style="vertical-align: top">No</td>
+    </tr>
+    <tr>
+        <td style="vertical-align: top">refer.vertex</td>
+        <td style="vertical-align: top; word-wrap: break-word">This is the ID of the refer vertex that connects with the main vertex in thegraph</td>
+        <td style="vertical-align: top"></td>
+        <td style="vertical-align: top">STRING</td>
+        <td style="vertical-align: top">No</td>
+        <td style="vertical-align: top">No</td>
+    </tr>
+    <tr>
+        <td style="vertical-align: top">notify.update</td>
+        <td style="vertical-align: top; word-wrap: break-word">It will give an alert if there is any update in the maximum clique of the graph</td>
+        <td style="vertical-align: top"></td>
+        <td style="vertical-align: top">BOOL</td>
+        <td style="vertical-align: top">No</td>
+        <td style="vertical-align: top">No</td>
+    </tr>
+</table>
+<span id="extra-return-attributes" class="md-typeset" style="display: block; font-weight: bold;">Extra Return Attributes</span>
+<table>
+    <tr>
+        <th>Name</th>
+        <th style="min-width: 20em">Description</th>
+        <th>Possible Types</th>
+    </tr>
+    <tr>
+        <td style="vertical-align: top">sizeOfMaximumClick</td>
+        <td style="vertical-align: top; word-wrap: break-word">Size of the maximum click of the graph</td>
+        <td style="vertical-align: top">INT</td>
+    </tr>
+</table>
+
+<span id="examples" class="md-typeset" style="display: block; font-weight: bold;">Examples</span>
+<span id="example-1" class="md-typeset" style="display: block; color: rgba(0, 0, 0, 0.54); font-size: 12.8px; font-weight: bold;">EXAMPLE 1</span>
+```
+define stream cseEventStream (vertex1 String, vertex2 String); 
+from cseEventStream#graph:maximumClique(vertex1,vertex2,false)  
+select maximumClique  
+insert all events into outputStream ;
+```
+<p style="word-wrap: break-word">Example for MaximumClique<br>This will return the maximum clique of a given graph.</p>
+
