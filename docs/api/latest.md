@@ -1,10 +1,10 @@
-# API Docs - v1.0.1
+# API Docs - v1.0.2-SNAPSHOT
 
 ## Graph
 
 ### sizeOfLargestConnectedComponent *<a target="_blank" href="https://wso2.github.io/siddhi/documentation/siddhi-4.0/#stream-processor">(Stream Processor)</a>*
 
-<p style="word-wrap: break-word">Returns the size of the largest connected component of a graph</p>
+<p style="word-wrap: break-word">This extension returns the size of the largest connected component of a graph</p>
 
 <span id="syntax" class="md-typeset" style="display: block; font-weight: bold;">Syntax</span>
 ```
@@ -39,7 +39,7 @@ graph:sizeOfLargestConnectedComponent(<STRING> main.vertex, <STRING> refer.verte
     </tr>
     <tr>
         <td style="vertical-align: top">notify.update</td>
-        <td style="vertical-align: top; word-wrap: break-word">This will give an alert if there is any update in the largest connectedcomponent of the graph</td>
+        <td style="vertical-align: top; word-wrap: break-word">If this is set to <code>true</code> an alert is sent if there is any update in the largest connected component of the graph</td>
         <td style="vertical-align: top"></td>
         <td style="vertical-align: top">BOOL</td>
         <td style="vertical-align: top">No</td>
@@ -55,7 +55,7 @@ graph:sizeOfLargestConnectedComponent(<STRING> main.vertex, <STRING> refer.verte
     </tr>
     <tr>
         <td style="vertical-align: top">sizeOfLargestConnectedComponent</td>
-        <td style="vertical-align: top; word-wrap: break-word">Size of the largest connected component of a graph</td>
+        <td style="vertical-align: top; word-wrap: break-word">The size of the largest connected component of a graph</td>
         <td style="vertical-align: top">LONG</td>
     </tr>
 </table>
@@ -68,11 +68,11 @@ from cseEventStream#graph:sizeOfLargestConnectedComponent(vertex1,vertex2,false)
 select sizeOfLargestConnectedComponent 
 insert all events into outputStream ;
 ```
-<p style="word-wrap: break-word">Example for LargestConnectedComponent<br>This will return size of the largest connected component of a given graph.</p>
+<p style="word-wrap: break-word">This query returns the size of the largest connected component of a given graph.</p>
 
 ### maximumClique *<a target="_blank" href="https://wso2.github.io/siddhi/documentation/siddhi-4.0/#stream-processor">(Stream Processor)</a>*
 
-<p style="word-wrap: break-word">Returns the size of the maximum clique of a graph</p>
+<p style="word-wrap: break-word">This extension returns the size of the maximum clique of a graph.</p>
 
 <span id="syntax" class="md-typeset" style="display: block; font-weight: bold;">Syntax</span>
 ```
@@ -107,7 +107,7 @@ graph:maximumClique(<STRING> main.vertex, <STRING> refer.vertex, <BOOL> notify.u
     </tr>
     <tr>
         <td style="vertical-align: top">notify.update</td>
-        <td style="vertical-align: top; word-wrap: break-word">It will give an alert if there is any update in the maximum clique of the graph</td>
+        <td style="vertical-align: top; word-wrap: break-word">If this is set to <code>true</code>, an alert is sent if there is any update in the maximum clique of the graph</td>
         <td style="vertical-align: top"></td>
         <td style="vertical-align: top">BOOL</td>
         <td style="vertical-align: top">No</td>
@@ -123,7 +123,7 @@ graph:maximumClique(<STRING> main.vertex, <STRING> refer.vertex, <BOOL> notify.u
     </tr>
     <tr>
         <td style="vertical-align: top">sizeOfMaximumClick</td>
-        <td style="vertical-align: top; word-wrap: break-word">Size of the maximum click of the graph</td>
+        <td style="vertical-align: top; word-wrap: break-word">Size of the maximum clique of the graph</td>
         <td style="vertical-align: top">INT</td>
     </tr>
 </table>
@@ -136,5 +136,5 @@ from cseEventStream#graph:maximumClique(vertex1,vertex2,false)
 select maximumClique  
 insert all events into outputStream ;
 ```
-<p style="word-wrap: break-word">Example for MaximumClique<br>This will return the maximum clique of a given graph.</p>
+<p style="word-wrap: break-word">This query returns the maximum clique of a given graph.</p>
 

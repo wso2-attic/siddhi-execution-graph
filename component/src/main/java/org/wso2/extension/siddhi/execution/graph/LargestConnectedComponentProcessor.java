@@ -48,7 +48,7 @@ import java.util.Map;
 @Extension(
         name = "sizeOfLargestConnectedComponent",
         namespace = "graph",
-        description = "Returns the size of the largest connected component of a graph",
+        description = "This extension returns the size of the largest connected component of a graph",
         parameters = {
                 @Parameter(
                         name = "main.vertex",
@@ -61,21 +61,21 @@ import java.util.Map;
                         type = {DataType.STRING}),
                 @Parameter(
                         name = "notify.update",
-                        description = "This will give an alert if there is any update in the largest connected" +
-                                "component of the graph",
+                        description = "If this is set to `true` an alert is sent if there is any update in the " +
+                                "largest connected component of the graph",
                         type = {DataType.BOOL}),
         },
         returnAttributes = @ReturnAttribute(
                 name = "sizeOfLargestConnectedComponent",
-                description = "Size of the largest connected component of a graph",
+                description = "The size of the largest connected component of a graph",
                 type = {DataType.LONG}),
         examples = @Example(
-        description = "Example for LargestConnectedComponent\n" +
-                "This will return size of the largest connected component of a given graph.",
-        syntax = "define stream cseEventStream (vertex1 String, vertex2 String); \n" +
-                "from cseEventStream#graph:sizeOfLargestConnectedComponent(vertex1,vertex2,false) \n" +
-                "select sizeOfLargestConnectedComponent \n" +
-                "insert all events into outputStream ;")
+                syntax = "define stream cseEventStream (vertex1 String, vertex2 String); \n" +
+                        "from cseEventStream#graph:sizeOfLargestConnectedComponent(vertex1,vertex2,false) \n" +
+                        "select sizeOfLargestConnectedComponent \n" +
+                        "insert all events into outputStream ;",
+                description = "This query returns the size of the largest connected component of a given graph.")
+
 )
 
 public class LargestConnectedComponentProcessor extends StreamProcessor {
