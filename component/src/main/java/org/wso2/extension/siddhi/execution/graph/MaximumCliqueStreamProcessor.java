@@ -50,7 +50,7 @@ import java.util.Set;
 @Extension(
         name = "maximumClique",
         namespace = "graph",
-        description = "Returns the size of the maximum clique of a graph",
+        description = "This extension returns the size of the maximum clique of a graph.",
         parameters = {
                 @Parameter(
                         name = "main.vertex",
@@ -63,21 +63,21 @@ import java.util.Set;
                         type = {DataType.STRING}),
                 @Parameter(
                         name = "notify.update",
-                        description = "It will give an alert if there is any update in the maximum clique " +
-                                "of the graph",
+                        description = "If this is set to `true`, an alert is sent if there is any update in the " +
+                                "maximum clique of the graph",
                         type = {DataType.BOOL}),
         },
         returnAttributes = @ReturnAttribute(
                 name = "sizeOfMaximumClick",
-                description = "Size of the maximum click of the graph",
+                description = "Size of the maximum clique of the graph",
                 type = {DataType.INT}),
         examples = @Example(
-                description = "Example for MaximumClique\n" +
-                        "This will return the maximum clique of a given graph.",
                 syntax = "define stream cseEventStream (vertex1 String, vertex2 String); \n" +
                         "from cseEventStream#graph:maximumClique(vertex1,vertex2,false)  \n" +
                         "select maximumClique  \n" +
-                        "insert all events into outputStream ;")
+                        "insert all events into outputStream ;",
+                description = "This query returns the maximum clique of a given graph.")
+
 )
 
 public class MaximumCliqueStreamProcessor extends StreamProcessor {
