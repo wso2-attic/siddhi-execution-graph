@@ -11,7 +11,7 @@ Find some useful links below:
 
 ## Latest API Docs 
 
-Latest API Docs is <a target="_blank" href="https://wso2-extensions.github.io/siddhi-execution-graph/api/1.0.6">1.0.6</a>.
+Latest API Docs is <a target="_blank" href="https://wso2-extensions.github.io/siddhi-execution-graph/api/1.0.7">1.0.7</a>.
 
 ## How to use 
 
@@ -45,8 +45,8 @@ Latest API Docs is <a target="_blank" href="https://wso2-extensions.github.io/si
 
 ## Features
 
-* <a target="_blank" href="https://wso2-extensions.github.io/siddhi-execution-graph/api/1.0.6/#maximumclique-stream-processor">maximumClique</a> *(<a target="_blank" href="https://wso2.github.io/siddhi/documentation/siddhi-4.0/#stream-processor">(Stream Processor)</a>)*<br><div style="padding-left: 1em;"><p>This extension returns the size of the maximum clique of a graph.</p></div>
-* <a target="_blank" href="https://wso2-extensions.github.io/siddhi-execution-graph/api/1.0.6/#sizeoflargestconnectedcomponent-stream-processor">sizeOfLargestConnectedComponent</a> *(<a target="_blank" href="https://wso2.github.io/siddhi/documentation/siddhi-4.0/#stream-processor">(Stream Processor)</a>)*<br><div style="padding-left: 1em;"><p>This extension returns the size of the largest connected component of a graph</p></div>
+* <a target="_blank" href="https://wso2-extensions.github.io/siddhi-execution-graph/api/1.0.7/#maximumclique-stream-processor">maximumClique</a> *(<a target="_blank" href="https://wso2.github.io/siddhi/documentation/siddhi-4.0/#stream-processor">(Stream Processor)</a>)*<br><div style="padding-left: 1em;"><p>This extension returns the size of the maximum clique of a graph.</p></div>
+* <a target="_blank" href="https://wso2-extensions.github.io/siddhi-execution-graph/api/1.0.7/#sizeoflargestconnectedcomponent-stream-processor">sizeOfLargestConnectedComponent</a> *(<a target="_blank" href="https://wso2.github.io/siddhi/documentation/siddhi-4.0/#stream-processor">(Stream Processor)</a>)*<br><div style="padding-left: 1em;"><p>This extension returns the size of the largest connected component of a graph</p></div>
 
 ## How to Contribute
  
