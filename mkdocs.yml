@@ -17,6 +17,7 @@ pages:
 - API Docs: null
 - License: license.md
 - API Docs:
+  - 1.0.10: api/1.0.10.md
   - 1.0.9: api/1.0.9.md
   - 1.0.8: api/1.0.8.md
   - 1.0.7: api/1.0.7.md
