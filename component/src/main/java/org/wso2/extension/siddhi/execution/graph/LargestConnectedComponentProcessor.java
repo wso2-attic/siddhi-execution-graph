@@ -43,39 +43,38 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Operator which is related to find the size of the largest connected component of a graph.
+ * Operator which is related to finding the size of the largest connected component of a graph.
  */
 @Extension(
         name = "sizeOfLargestConnectedComponent",
         namespace = "graph",
-        description = "This extension returns the size of the largest connected component of a graph",
+        description = "This extension returns the size of the largest connected component of a graph.",
         parameters = {
                 @Parameter(
                         name = "main.vertex",
-                        description = "This is the ID of the main vertex that is used to create the graph",
+                        description = "This is the ID of the main vertex that is used to create the graph.",
                         type = {DataType.STRING}),
                 @Parameter(
                         name = "refer.vertex",
-                        description = "This is the ID of the refer vertex that connects with the main vertex in the " +
-                                "graph",
+                        description = "This is the ID of the 'refer vertex' that connects " +
+                                "with the main vertex in the graph.",
                         type = {DataType.STRING}),
                 @Parameter(
                         name = "notify.update",
-                        description = "If this is set to `true` an alert is sent if there is any update in the " +
-                                "largest connected component of the graph",
+                        description = "If this is set to `true` and if there is any update in the " +
+                                "largest connected component of the graph, an alert is sent.",
                         type = {DataType.BOOL}),
         },
         returnAttributes = @ReturnAttribute(
                 name = "sizeOfLargestConnectedComponent",
-                description = "The size of the largest connected component of a graph",
+                description = "The size of the largest connected component of a graph.",
                 type = {DataType.LONG}),
         examples = @Example(
-                syntax = "define stream cseEventStream (vertex1 String, vertex2 String); \n" +
-                        "from cseEventStream#graph:sizeOfLargestConnectedComponent(vertex1,vertex2,false) \n" +
+                syntax = "define stream CseEventStream (vertex1 String, vertex2 String); \n" +
+                        "from CseEventStream#graph:sizeOfLargestConnectedComponent(vertex1,vertex2,false) \n" +
                         "select sizeOfLargestConnectedComponent \n" +
-                        "insert all events into outputStream ;",
+                        "insert all events into OutputStream ;",
                 description = "This query returns the size of the largest connected component of a given graph.")
-
 )
 
 public class LargestConnectedComponentProcessor extends StreamProcessor {

@@ -54,28 +54,28 @@ import java.util.Set;
         parameters = {
                 @Parameter(
                         name = "main.vertex",
-                        description = "This is the ID of the main vertex that is used to create a graph",
+                        description = "This is the ID of the main vertex that is used to create a graph.",
                         type = {DataType.STRING}),
                 @Parameter(
                         name = "refer.vertex",
-                        description = "This is the ID of the refer vertex that connects with the main vertex in the" +
-                                "graph",
+                        description = "This is the ID of the 'refer vertex' that connects with the main vertex in the" +
+                                "graph.",
                         type = {DataType.STRING}),
                 @Parameter(
                         name = "notify.update",
-                        description = "If this is set to `true`, an alert is sent if there is any update in the " +
-                                "maximum clique of the graph",
+                        description = "If this is set to `true` and if there is any update in the " +
+                                "maximum clique of the graph, an alert is sent.",
                         type = {DataType.BOOL}),
         },
         returnAttributes = @ReturnAttribute(
                 name = "sizeOfMaximumClick",
-                description = "Size of the maximum clique of the graph",
+                description = "The size of the maximum clique of the graph.",
                 type = {DataType.INT}),
         examples = @Example(
-                syntax = "define stream cseEventStream (vertex1 String, vertex2 String); \n" +
-                        "from cseEventStream#graph:maximumClique(vertex1,vertex2,false)  \n" +
+                syntax = "define stream CseEventStream (vertex1 String, vertex2 String); \n" +
+                        "from CseEventStream#graph:maximumClique(vertex1,vertex2,false)  \n" +
                         "select maximumClique  \n" +
-                        "insert all events into outputStream ;",
+                        "insert all events into OutputStream;",
                 description = "This query returns the maximum clique of a given graph.")
 
 )
