@@ -106,6 +106,9 @@
                             org.wso2.extension.siddhi.execution.graph.*
                         </Export-Package>
                         <Import-Package>
+                            org.wso2.siddhi.core.*;version="${siddhi.version.range}",
+                            org.wso2.siddhi.query.api.*;version="${siddhi.version.range}",
+                            org.wso2.siddhi.query.compiler.*;version="${siddhi.version.range}",
                             *;resolution:=optional
                         </Import-Package>
                         <Include-Resource>
