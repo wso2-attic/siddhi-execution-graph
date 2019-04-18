@@ -17,25 +17,30 @@
  */
 package org.wso2.extension.siddhi.execution.graph;
 
-import org.wso2.siddhi.annotation.Example;
-import org.wso2.siddhi.annotation.Extension;
-import org.wso2.siddhi.annotation.Parameter;
-import org.wso2.siddhi.annotation.ReturnAttribute;
-import org.wso2.siddhi.annotation.util.DataType;
-import org.wso2.siddhi.core.config.SiddhiAppContext;
-import org.wso2.siddhi.core.event.ComplexEventChunk;
-import org.wso2.siddhi.core.event.stream.StreamEvent;
-import org.wso2.siddhi.core.event.stream.StreamEventCloner;
-import org.wso2.siddhi.core.event.stream.populater.ComplexEventPopulater;
-import org.wso2.siddhi.core.executor.ConstantExpressionExecutor;
-import org.wso2.siddhi.core.executor.ExpressionExecutor;
-import org.wso2.siddhi.core.executor.VariableExpressionExecutor;
-import org.wso2.siddhi.core.query.processor.Processor;
-import org.wso2.siddhi.core.query.processor.stream.StreamProcessor;
-import org.wso2.siddhi.core.util.config.ConfigReader;
-import org.wso2.siddhi.query.api.definition.AbstractDefinition;
-import org.wso2.siddhi.query.api.definition.Attribute;
-import org.wso2.siddhi.query.api.exception.SiddhiAppValidationException;
+import io.siddhi.annotation.Example;
+import io.siddhi.annotation.Extension;
+import io.siddhi.annotation.Parameter;
+import io.siddhi.annotation.ReturnAttribute;
+import io.siddhi.annotation.util.DataType;
+import io.siddhi.core.config.SiddhiQueryContext;
+import io.siddhi.core.event.ComplexEventChunk;
+import io.siddhi.core.event.stream.MetaStreamEvent;
+import io.siddhi.core.event.stream.StreamEvent;
+import io.siddhi.core.event.stream.StreamEventCloner;
+import io.siddhi.core.event.stream.holder.StreamEventClonerHolder;
+import io.siddhi.core.event.stream.populater.ComplexEventPopulater;
+import io.siddhi.core.executor.ConstantExpressionExecutor;
+import io.siddhi.core.executor.ExpressionExecutor;
+import io.siddhi.core.executor.VariableExpressionExecutor;
+import io.siddhi.core.query.processor.ProcessingMode;
+import io.siddhi.core.query.processor.Processor;
+import io.siddhi.core.query.processor.stream.StreamProcessor;
+import io.siddhi.core.util.config.ConfigReader;
+import io.siddhi.core.util.snapshot.state.State;
+import io.siddhi.core.util.snapshot.state.StateFactory;
+import io.siddhi.query.api.definition.AbstractDefinition;
+import io.siddhi.query.api.definition.Attribute;
+import io.siddhi.query.api.exception.SiddhiAppValidationException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -77,60 +82,21 @@ import java.util.Map;
                 description = "This query returns the size of the largest connected component of a given graph.")
 )
 
-public class LargestConnectedComponentProcessor extends StreamProcessor {
+public class LargestConnectedComponentProcessor extends StreamProcessor<State> {
 
     private VariableExpressionExecutor variableExpressionId;
     private VariableExpressionExecutor variableExpressionFriendId;
     private Graph graph = new Graph();
     private long largestConnectedComponentSize = 0;
     private boolean notifyUpdates;
+    private List<Attribute> attributeList = new ArrayList<Attribute>();
 
-    /**
-     * The main processing method that will be called upon event arrival
-     *
-     * @param streamEventChunk      the event chunk that need to be processed
-     * @param nextProcessor         the next processor to which the success events need to be passed
-     * @param streamEventCloner     helps to clone the incoming event for local storage or
-     *                              modification
-     * @param complexEventPopulater helps to populate the events with the resultant attributes
-     */
     @Override
-    protected void process(ComplexEventChunk<StreamEvent> streamEventChunk, Processor nextProcessor,
-                           StreamEventCloner streamEventCloner, ComplexEventPopulater complexEventPopulater) {
-        synchronized (this) {
-            while (streamEventChunk.hasNext()) {
-                StreamEvent event = streamEventChunk.next();
-                String vertexOneId = (String) variableExpressionId.execute(event);
-                String vertexTwoId = (String) variableExpressionFriendId.execute(event);
-                graph.addEdge(vertexOneId, vertexTwoId);
-                long newLargestConnectedComponent = getLargestConnectedComponent();
-                if (largestConnectedComponentSize != newLargestConnectedComponent) {
-                    largestConnectedComponentSize = newLargestConnectedComponent;
-                    complexEventPopulater.populateComplexEvent(event, new Object[]{newLargestConnectedComponent});
-                } else if (notifyUpdates) {
-                    complexEventPopulater.populateComplexEvent(event, new Object[]{newLargestConnectedComponent});
-                } else {
-                    streamEventChunk.remove();
-                }
-            }
-        }
-        nextProcessor.process(streamEventChunk);
-    }
-
-
-    /**
-     * The init method of the LargestConnectedComponentProcessor,
-     * this method will be called before other methods
-     *
-     * @param inputDefinition              the incoming stream definition
-     * @param attributeExpressionExecutors the executors of each function parameters
-     * @param configReader                 explain here
-     * @param siddhiAppContext              the context of the execution plan
-     * @return the additional output attributes introduced by the function
-     */
-    @Override
-    protected List<Attribute> init(AbstractDefinition inputDefinition, ExpressionExecutor[]
-            attributeExpressionExecutors, ConfigReader configReader, SiddhiAppContext siddhiAppContext) {
+    protected StateFactory<State> init(MetaStreamEvent metaStreamEvent, AbstractDefinition abstractDefinition,
+                                       ExpressionExecutor[] attributeExpressionExecutors, ConfigReader configReader,
+                                       StreamEventClonerHolder streamEventClonerHolder,
+                                       boolean outputExpectsExpiredEvents, boolean findToBeExecuted,
+                                       SiddhiQueryContext siddhiQueryContext) {
         if (attributeExpressionExecutors.length != 3) {
             throw new UnsupportedOperationException("Invalid no of arguments passed to " +
                     "graph:sizeOfLargestConnectedComponent," + "required 3, but found" +
@@ -165,9 +131,41 @@ public class LargestConnectedComponentProcessor extends StreamProcessor {
                         getClass().getCanonicalName());
             }
         }
-        List<Attribute> attributeList = new ArrayList<Attribute>();
         attributeList.add(new Attribute("size", Attribute.Type.LONG));
-        return attributeList;
+        return null;
+    }
+
+    /**
+     * The main processing method that will be called upon event arrival
+     *
+     * @param streamEventChunk      the event chunk that need to be processed
+     * @param nextProcessor         the next processor to which the success events need to be passed
+     * @param streamEventCloner     helps to clone the incoming event for local storage or
+     *                              modification
+     * @param complexEventPopulater helps to populate the events with the resultant attributes
+     */
+    @Override
+    protected void process(ComplexEventChunk<StreamEvent> streamEventChunk, Processor nextProcessor,
+                           StreamEventCloner streamEventCloner,
+                           ComplexEventPopulater complexEventPopulater, State state) {
+        synchronized (this) {
+            while (streamEventChunk.hasNext()) {
+                StreamEvent event = streamEventChunk.next();
+                String vertexOneId = (String) variableExpressionId.execute(event);
+                String vertexTwoId = (String) variableExpressionFriendId.execute(event);
+                graph.addEdge(vertexOneId, vertexTwoId);
+                long newLargestConnectedComponent = getLargestConnectedComponent();
+                if (largestConnectedComponentSize != newLargestConnectedComponent) {
+                    largestConnectedComponentSize = newLargestConnectedComponent;
+                    complexEventPopulater.populateComplexEvent(event, new Object[]{newLargestConnectedComponent});
+                } else if (notifyUpdates) {
+                    complexEventPopulater.populateComplexEvent(event, new Object[]{newLargestConnectedComponent});
+                } else {
+                    streamEventChunk.remove();
+                }
+            }
+        }
+        nextProcessor.process(streamEventChunk);
     }
 
     /**
@@ -251,15 +249,13 @@ public class LargestConnectedComponentProcessor extends StreamProcessor {
 
     }
 
-
     @Override
-    public Map<String, Object> currentState() {
-        return null;
+    public List<Attribute> getReturnAttributes() {
+        return attributeList;
     }
 
     @Override
-    public void restoreState(Map<String, Object> state) {
-
+    public ProcessingMode getProcessingMode() {
+        return ProcessingMode.BATCH;
     }
-
 }
